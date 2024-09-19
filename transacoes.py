@@ -7,9 +7,9 @@ def validar_valor(valor: float):
     if valor <= 0:
         raise ValueError("O valor deve ser maior que zero.")
 
-def validar_titular(banco, titular: str):
+def validar_titular(banco, cpf_cliente: str):
     """Verifica se o titular existe no banco."""
-    if titular not in banco.contas:
+    if cpf_cliente not in banco.contas:
         raise ValueError("Conta não encontrada.")
 
 def formatar_valor(valor: float) -> str:
@@ -18,7 +18,10 @@ def formatar_valor(valor: float) -> str:
 
 def registrar_transacao(titular: str, descricao: str, valor: float, log_file: Optional[str] = None):
     """Registra a transação em um arquivo de log, se especificado."""
-    log_entry = f"{titular} - {descricao}: {formatar_valor(valor)}\n"
-    if log_file:
-        with open(log_file, 'a') as file:
-            file.write(log_entry)
+    try:
+        log_entry = f"{titular} - {descricao}: {formatar_valor(valor)}\n"
+        if log_file:
+            with open(log_file, 'a') as file:
+                file.write(log_entry)
+    except IOError as e:
+        print(f"Erro ao registrar transação: {e}")

@@ -1,9 +1,9 @@
 # interface.py
 
 from banco import Banco
+from transacoes import formatar_valor
 
 def menu():
-    """Exibe o menu principal do sistema bancário."""
     print("\nBem-vindo ao Sistema Bancário")
     print("1. Criar conta")
     print("2. Depositar")
@@ -12,40 +12,45 @@ def menu():
     print("5. Sair")
 
 def criar_conta(banco: Banco):
-    """Cria uma nova conta bancária e exibe mensagem de sucesso ou erro."""
-    try:
-        titular = input("Digite o nome do titular: ")
-        saldo_inicial = float(input("Digite o saldo inicial: "))
-        mensagem = banco.criar_conta(titular, saldo_inicial)
-        print(mensagem)
-    except ValueError as e:
-        print(e)
+    nome_cliente = input("Digite o nome do titular: ").strip()
+    cpf_cliente = input("Digite o CPF do titular: ").strip()
+    saldo_inicial = float(input("Digite o saldo inicial: ").strip())
+    banco.criar_conta(nome_cliente, cpf_cliente, saldo_inicial)
 
 def realizar_deposito(banco: Banco):
-    """Realiza um depósito e exibe mensagem de sucesso ou erro."""
-    try:
-        titular = input("Digite o nome do titular: ")
-        valor = float(input("Digite o valor do depósito: "))
-        mensagem = banco.realizar_deposito(titular, valor)
-        print(mensagem)
-    except ValueError as e:
-        print(e)
+    cpf_cliente = input("Digite o CPF do titular: ").strip()
+    valor = float(input("Digite o valor do depósito: ").strip())
+    banco.realizar_deposito(cpf_cliente, valor)
 
 def realizar_saque(banco: Banco):
-    """Realiza um saque e exibe mensagem de sucesso ou erro."""
-    try:
-        titular = input("Digite o nome do titular: ")
-        valor = float(input("Digite o valor do saque: "))
-        mensagem = banco.realizar_saque(titular, valor)
-        print(mensagem)
-    except ValueError as e:
-        print(e)
+    cpf_cliente = input("Digite o CPF do titular: ").strip()
+    valor = float(input("Digite o valor do saque: ").strip())
+    banco.realizar_saque(cpf_cliente, valor)
 
 def emitir_extrato(banco: Banco):
-    """Emite o extrato da conta e exibe ou exibe mensagem de erro."""
-    try:
-        titular = input("Digite o nome do titular: ")
-        extrato = banco.emitir_extrato(titular)
-        print(extrato)
-    except ValueError as e:
-        print(e)
+    cpf_cliente = input("Digite o CPF do titular: ").strip()
+    banco.emitir_extrato(cpf_cliente)
+
+def executar_sistema():
+    banco = Banco()
+
+    while True:
+        menu()
+        opcao = input("Escolha uma opção: ").strip()
+
+        if opcao == "1":
+            criar_conta(banco)
+        elif opcao == "2":
+            realizar_deposito(banco)
+        elif opcao == "3":
+            realizar_saque(banco)
+        elif opcao == "4":
+            emitir_extrato(banco)
+        elif opcao == "5":
+            print("Obrigado por usar o Sistema Bancário.")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+if __name__ == "__main__":
+    executar_sistema()
